@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Admin Home - E-ASHA</title>
+  <style>
+    :root {
+      --primary: #2F3C7E;
+      --accent: #A8D0E6;
+      --success: #70C1B3;
+      --bg: #F4F4F8;
+      --text-dark: #333333;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html, body {
+      height: 100%;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      background: url("{{ url_for('static', filename='images/bg1.jpg') }}") no-repeat center center fixed;
+      background-size: cover;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+
+    .bg-overlay {
+      flex: 1;
+      background-color: rgba(255, 255, 255, 0.85);
+      display: flex;
+      flex-direction: column;
+    }
+
+    nav {
+      background-color: var(--primary);
+      color: white;
+      padding: 15px 25px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: relative;
+    }
+
+    /* Hamburger icon */
+    .hamburger {
+      cursor: pointer;
+      z-index: 101;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .hamburger div {
+      width: 25px;
+      height: 3px;
+      background-color: white;
+    }
+
+    .nav-center {
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      align-items: center;
+      font-weight: bold;
+      font-size: 20px;
+    }
+
+    .nav-center img {
+      height: 40px;
+      margin-right: 10px;
+    }
+
+    .nav-right a {
+      color: white;
+      text-decoration: none;
+      font-weight: bold;
+      margin-left: 20px;
+    }
+
+    .nav-right a:hover {
+      color: var(--success);
+    }
+
+    .content {
+      flex: 1;
+      padding: 60px 20px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .admin-box {
+      background: white;
+      padding: 40px;
+      border-radius: 12px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      max-width: 600px;
+      width: 100%;
+      text-align: center;
+    }
+
+    h2 {
+      color: var(--primary);
+      margin-bottom: 20px;
+    }
+
+    .admin-links {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+      margin-top: 30px;
+    }
+
+    .admin-links a {
+      text-decoration: none;
+      background-color: var(--primary);
+      color: white;
+      padding: 12px;
+      border-radius: 6px;
+      font-weight: bold;
+      transition: background-color 0.3s;
+    }
+
+    .admin-links a:hover {
+      background-color: var(--success);
+    }
+
+    footer {
+      background-color: var(--primary);
+      color: white;
+      text-align: center;
+      padding: 15px;
+      font-size: 14px;
+    }
+
+    footer span {
+      color: var(--bg);
+      font-weight: bold;
+    }
+
+    /* Sidebar styles */
+    .sidebar {
+      height: 100%;
+      width: 0;
+      position: fixed;
+      z-index: 100;
+      top: 0;
+      left: 0;
+      background-color: #1c1244;
+      overflow-x: hidden;
+      transition: 0.3s;
+      padding-top: 60px;
+    }
+
+    .sidebar a {
+      padding: 15px 25px;
+      text-decoration: none;
+      font-size: 18px;
+      color: white;
+      display: block;
+      font-weight: bold;
+    }
+
+    .sidebar a:hover {
+      background-color: #333;
+    }
+
+    .sidebar .closebtn {
+      position: absolute;
+      top: 10px;
+      right: 20px;
+      font-size: 30px;
+      color: white;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Sidebar -->
+  <div id="mySidebar" class="sidebar">
+    
+    <a href="/admin_profile">Profile</a>
+    <a >Help</a>
+    <a href="/logout">Logout</a>
+  </div>
+
+  <div class="bg-overlay">
+
+    <!-- Navbar -->
+    <nav>
+      <!-- Always visible Hamburger Icon -->
+      <div class="hamburger" onclick="toggleSidebar()">
+        <div></div>
+        <div></div>
+        <div></div>
+      </div>
+
+      <!-- Center: Logo + Name -->
+      <div class="nav-center">
+        <img src="{{ url_for('static', filename='images/asha_logo.png') }}" alt="Logo">
+        E-ASHA - Admin Panel
+      </div>
+
+      <!-- Right: Logout -->
+      <div class="nav-right">
+        <a href="/logout">Logout</a>
+      </div>
+    </nav>
+
+    <!-- Main Admin Content -->
+    <div class="content">
+      <div class="admin-box">
+        <h2>Welcome, Admin!</h2>
+        <p>Use the options below to manage the E-ASHA system:</p>
+
+        <div class="admin-links">
+          <a href="{{ url_for('manage_asha') }}">Manage ASHA Workers</a>
+          <a href="{{ url_for('allview') }}">View All Patient Reports</a>
+          <a href="{{ url_for('disease_graph') }}">Disease Trends</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+      Website developed by <span>Rohit Bavale</span> & <span>Sumeet Mungase</span>
+    </footer>
+
+  </div>
+
+  <!-- JavaScript for Sidebar Toggle -->
+  <script>
+    function toggleSidebar() {
+      const sidebar = document.getElementById("mySidebar");
+      if (sidebar.style.width === "250px") {
+        sidebar.style.width = "0";
+      } else {
+        sidebar.style.width = "250px";
+      }
+    }
+
+    function closeSidebar() {
+      document.getElementById("mySidebar").style.width = "0";
+    }
+  </script>
+
+</body>
+</html>

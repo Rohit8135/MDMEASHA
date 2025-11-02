@@ -1,0 +1,293 @@
+<!-- Floating Chat Button -->
+<div id="chat-btn" onclick="toggleChat()">💬</div>
+
+<!-- Chat Popup -->
+<div id="chat-popup">
+  <div class="chat-header">
+    <span>E-ASHA Assistant</span>
+  </div>
+
+  <div id="chat-box">
+    <div class="bot-msg">
+      👋 <strong>Welcome to E-ASHA Assistant!</strong><br><br>
+      I can help you with:
+      <ul>
+        <li>Adding patients and selecting diseases</li>
+        <li>Medicine recommendations</li>
+        <li>Website navigation</li>
+        <li>Emergency contacts</li>
+      </ul>
+      How can I assist you today?
+    </div>
+
+    <!-- Common Questions -->
+    <div id="common-questions">
+      <button class="option-btn">How to add patient?</button>
+      <button class="option-btn">Patient history</button>
+      <button class="option-btn">Emergency contacts</button>
+      <button class="option-btn">Dashboard help</button> 
+    </div>
+  </div>
+
+  <!-- Input -->
+  <div class="chat-input">
+    <input type="text" id="user-input" placeholder="Type your message..." />
+    <button id="send-btn">Send</button>
+  </div>
+</div>
+
+<style>
+  /* Floating Chat Button */
+  #chat-btn {
+    position: fixed;
+    bottom: 60px;
+    right: 20px;
+    background: #2F3C7E;
+    color: white;
+    font-size: 22px;
+    border-radius: 50%;
+    padding: 15px;
+    cursor: pointer;
+    box-shadow: 0px 4px 8px rgba(0,0,0,0.2);
+    z-index: 9999;
+  }
+
+  /* Chat Popup */
+  #chat-popup {
+    display: none;
+    position: fixed;
+    bottom: 140px;
+    right: 20px;
+    width: 350px;
+    height: 500px;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+    overflow: hidden;
+    z-index: 10000;
+    flex-direction: column;
+  }
+  /* Ensure footer stays stuck at bottom */
+footer {
+  position: relative;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+}
+
+  /* Chat Header */
+  .chat-header {
+    background: #2F3C7E;
+    color: white;
+    font-weight: bold;
+    padding: 12px;
+    text-align: center;
+  }
+
+  /* Chat Box */
+  #chat-box {
+    flex: 1;
+    padding: 16px;
+    overflow-y: auto;
+    font-size: 14px;
+    background: #F8F9FA;
+    display: flex;
+    flex-direction: column;
+    scroll-behavior: smooth;
+  }
+
+  /* Custom scrollbar */
+  #chat-box::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  #chat-box::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 3px;
+  }
+
+  #chat-box::-webkit-scrollbar-thumb {
+    background: #c1c1c1;
+    border-radius: 3px;
+  }
+
+  #chat-box::-webkit-scrollbar-thumb:hover {
+    background: #a8a8a8;
+  }
+
+  /* Messages */
+  .bot-msg, .user-msg {
+    margin: 8px 0;
+    padding: 12px 16px;
+    border-radius: 12px;
+    max-width: 85%;
+    word-wrap: break-word;
+    line-height: 1.4;
+    font-size: 14px;
+  }
+
+  .bot-msg {
+    background: #E8F4FD;
+    color: #2F3C7E;
+    align-self: flex-start;
+    border: 1px solid #A8D0E6;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+  }
+
+  .user-msg {
+    background: #2F3C7E;
+    color: white;
+    align-self: flex-end;
+    margin-left: auto;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+  }
+
+  /* Better formatting for lists and structured content */
+  .bot-msg ol, .bot-msg ul {
+    margin: 8px 0;
+    padding-left: 20px;
+  }
+
+  .bot-msg li {
+    margin: 4px 0;
+  }
+
+  .bot-msg strong {
+    color: #1f2a59;
+  }
+
+  /* Better spacing for numbered steps */
+  .bot-msg br {
+    line-height: 1.8;
+  }
+
+  /* Ensure proper spacing between numbered items */
+  .bot-msg {
+    white-space: pre-line;
+  }
+
+  /* Common Question Buttons */
+  #common-questions {
+    padding: 10px;
+    border-top: 1px solid #ccc;
+    background: #fff;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .option-btn {
+    display: block;
+    width: 90%;
+    margin: 6px auto;
+    padding: 12px;
+    background: #2F3C7E;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.3s;
+  }
+
+  .option-btn:hover {
+    background: #1f2a59;
+  }
+
+  /* Input Area */
+/* Force correct alignment ONLY inside chat popup */
+#chat-popup .chat-input {
+  display: flex !important;
+  align-items: center !important;
+  padding: 8px !important;
+  border-top: 1px solid #ddd !important;
+  background: #fff !important;
+}
+
+#chat-popup .chat-input input {
+  flex: 1 !important;
+  padding: 10px 14px !important;
+  border: 1px solid #ccc !important;
+  border-radius: 20px !important;
+  outline: none !important;
+  font-size: 14px !important;
+  height: auto !important;   /* override home page input styles */
+}
+
+#chat-popup .chat-input button {
+  margin-left: 10px !important;
+  padding: 10px 18px !important;
+  border: none !important;
+  border-radius: 20px !important;
+  background-color: #2F3C7E !important;
+  color: white !important;
+  font-weight: bold !important;
+  cursor: pointer !important;
+  flex-shrink: 0 !important;
+  width: 70px !important;
+  text-align: center !important;
+  height: auto !important;   /* override home page button styles */
+}
+
+
+  .chat-input button:hover {
+    background-color: #1f2a59;
+  }
+</style>
+
+<script>
+  function toggleChat() {
+    const popup = document.getElementById("chat-popup");
+    popup.style.display = (popup.style.display === "flex") ? "none" : "flex";
+    popup.style.flexDirection = "column"; // ensure flex works
+  }
+
+  function appendMessage(content, type) {
+    const chatBox = document.getElementById("chat-box");
+    const msgDiv = document.createElement("div");
+    msgDiv.className = type === "user" ? "user-msg" : "bot-msg";
+    // Preserve line breaks and format content properly
+    msgDiv.innerHTML = content.replace(/\n/g, '<br>');
+    chatBox.appendChild(msgDiv);
+    chatBox.scrollTop = chatBox.scrollHeight;
+  }
+
+  async function sendMessage() {
+    const input = document.getElementById("user-input");
+    const msg = input.value.trim();
+    if (!msg) return;
+
+    appendMessage(msg, "user");
+    input.value = "";
+
+    try {
+      const response = await fetch("/ask", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ message: msg })
+      });
+
+      const data = await response.json();
+      appendMessage(data.reply, "bot");
+    } catch (err) {
+      appendMessage("⚠️ Server error. Please try again later.", "bot");
+    }
+  }
+
+  document.getElementById("send-btn").addEventListener("click", sendMessage);
+  document.getElementById("user-input").addEventListener("keypress", function(event) {
+    if (event.key === "Enter") {
+      event.preventDefault();
+      sendMessage();
+    }
+  });
+
+  // Common question buttons functionality
+  document.querySelectorAll(".option-btn").forEach(btn => {
+    btn.addEventListener("click", () => {
+      const input = document.getElementById("user-input");
+      input.value = btn.textContent;
+      sendMessage();
+    });
+  });
+</script>

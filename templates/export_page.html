@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Export ASHA Workers</title>
+  <style>
+    :root {
+      --primary: #2F3C7E;
+      --bg: #F4F4F8;
+      --success: #70C1B3;
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+      background-color: var(--bg);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+    }
+
+    .container {
+      text-align: center;
+      background-color: white;
+      padding: 40px;
+      border-radius: 12px;
+      box-shadow: 0 0 12px rgba(0,0,0,0.08);
+    }
+
+    h2 {
+      color: var(--primary);
+      margin-bottom: 25px;
+    }
+
+    .btn {
+      display: inline-block;
+      padding: 12px 24px;
+      font-size: 16px;
+      font-weight: bold;
+      color: white;
+      background-color: var(--primary);
+      text-decoration: none;
+      border-radius: 6px;
+      transition: background-color 0.3s ease;
+    }
+
+    .btn:hover {
+      background-color: #1f2a5c;
+    }
+
+    .back-link {
+      display: block;
+      margin-top: 20px;
+      color: var(--primary);
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    .back-link:hover {
+      color: var(--success);
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <h2>Export ASHA Worker Data</h2>
+    <a href="{{ url_for('export_users') }}" class="btn">Export CSV</a>
+    <a href="{{ url_for('home_admin') }}" class="back-link">← Back to Admin Home</a>
+  </div>
+
+</body>
+</html>

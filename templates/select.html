@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Select Disease - E-ASHA</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    :root {
+      --primary: #2F3C7E;
+      --accent: #A8D0E6;
+      --success: #70C1B3;
+      --bg: #F4F4F8;
+      --text-dark: #333333;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      background: url('{{ url_for("static", filename="images/bg1.jpg") }}') no-repeat center center fixed;
+      background-size: cover;
+    }
+
+    .overlay {
+      background-color: rgba(244, 244, 248, 0.85);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    nav {
+      background-color: var(--primary);
+      padding: 15px 25px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      color: white;
+      font-weight: bold;
+      font-size: 20px;
+    }
+
+    .logo img {
+      height: 40px;
+      margin-right: 10px;
+    }
+
+    nav a {
+      color: white;
+      text-decoration: none;
+      margin-left: 25px;
+      font-weight: bold;
+    }
+
+    nav a:hover {
+      color: var(--success);
+    }
+
+    .content {
+      flex: 1;
+      display: flex;
+      justify-content: center;
+      padding: 50px 20px;
+    }
+
+    .form-box {
+      background-color: white;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 0 12px rgba(0, 0, 0, 0.1);
+      width: 100%;
+      max-width: 600px;
+      max-height: 430px;
+    }
+
+    h2 {
+      text-align: center;
+      color: var(--primary);
+      margin-bottom: 20px;
+    }
+
+    .info {
+      margin-bottom: 20px;
+      color: var(--text-dark);
+    }
+
+    label {
+      display: block;
+      font-weight: bold;
+      margin-top: 10px;
+      color: var(--primary);
+    }
+
+    select {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid var(--accent);
+      border-radius: 6px;
+      margin-top: 6px;
+      font-size: 15px;
+    }
+
+    button {
+      margin-top: 20px;
+      width: 100%;
+      background-color: var(--primary);
+      color: white;
+      padding: 12px;
+      font-weight: bold;
+      font-size: 16px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: var(--success);
+    }
+
+    .result {
+      text-align: center;
+      margin-top: 20px;
+      font-weight: bold;
+      color: var(--primary);
+    }
+
+    .error-msg {
+      text-align: center;
+      color: red;
+      margin-top: 10px;
+      font-weight: bold;
+    }
+
+    .back-btn {
+      text-align: center;
+      margin-top: 40px;
+    }
+
+    .back-btn a {
+      padding: 10px 25px;
+      background-color: var(--primary);
+      color: white;
+      text-decoration: none;
+      border-radius: 6px;
+      font-weight: bold;
+      display: inline-block;
+    }
+
+    .back-btn a:hover {
+      background-color: var(--success);
+    }
+
+    footer {
+      background-color: var(--primary);
+      color: white;
+      text-align: center;
+      padding: 15px;
+      font-size: 14px;
+    }
+
+    footer span {
+      font-weight: bold;
+      color: var(--bg);
+    }
+
+    @media (max-width: 480px) {
+      nav {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      nav a {
+        margin: 10px 0 0 0;
+      }
+
+      .form-box {
+        padding: 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="overlay">
+
+    <!-- Header -->
+    <nav>
+      <div class="logo">
+        <img src="{{ url_for('static', filename='images/asha_logo.png') }}" alt="Logo">
+        E-ASHA - Health App 
+      </div>
+      <div>
+        <a href="/">Home</a>
+        <a href="/history">Patient History</a>
+        <a href="/dashboard">Dashboard</a>
+      </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="content">
+      <div class="form-box">
+        <h2>Suggest Medicine</h2>
+        <div class="info">
+          <p><strong>Name of Patient :- </strong> {{ name }}</p>
+          <p><strong>Age :- </strong> {{ age }}</p>
+          <p><strong>Mobile :- </strong> {{ mobile }}</p>
+        </div>
+
+        {% if error %}
+          <div class="error-msg">{{ error }}</div>
+        {% endif %}
+
+        <form method="post">
+          <label for="disease">Disease</label>
+          <select name="disease" id="disease" required>
+            <option disabled selected>Select Disease</option>
+            <option value="cold">Cold (सर्दी)</option>
+            <option value="fever">Fever (ताप)</option>
+            <option value="headache">Headache (डोकेदुखी)</option>
+            <option value="diabetes">Diabetes (मधुमेह)</option>
+            <option value="asthma">Asthma (दमा)</option>
+            <option value="cough">Cough (खोकला)</option>
+            <option value="vomiting">Vomiting (ओकाऱ्या)</option>
+            <option value="diarrhea">Diarrhea (जुलाब)</option>
+            <option value="high bp">High BP (उच्च रक्तदाब)</option>
+            <option value="acidity">Acidity (अम्लपित्त)</option>
+            <option value="back pain">Back Pain (पाठीचा त्रास)</option>
+            <option value="joint pain">Joint Pain (सांधेदुखी)</option>
+            <option value="skin allergy">Skin Allergy (त्वचेची अ‍ॅलर्जी)</option>
+            <option value="eye irritation">Eye Irritation (डोळ्यांची जळजळ)</option>
+            <option value="ear pain">Ear Pain (कानदुखी)</option>
+            <option value="toothache">Toothache (दात दुखणे)</option>
+            <option value="menstrual pain">Menstrual Pain (मासिक पाळीचा त्रास)</option>
+            <option value="constipation">Constipation (मळावष्टंभ)</option>
+          </select>
+          <button type="submit">Get Medicine</button>
+        </form>
+
+        {% if medicine %}
+          <div class="result">
+            💊 Suggested Medicine: <strong>{{ medicine }}</strong>
+          </div>
+        {% endif %}
+
+        <div class="back-btn">
+          <a href="/page1">← Back to Home</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+      Website developed by <span>Rohit Bavale</span> & <span>Sumeet Mungase</span>
+    </footer>
+
+  </div>
+</body>
+</html>

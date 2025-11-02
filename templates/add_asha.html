@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Add ASHA Worker - E-ASHA</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    :root {
+      --primary: #2F3C7E;
+      --accent: #A8D0E6;
+      --success: #70C1B3;
+      --bg: #F4F4F8;
+      --text-dark: #333333;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      background-color: var(--bg);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    nav {
+      background-color: var(--primary);
+      color: white;
+      padding: 15px 25px;
+      display: flex;
+      align-items: center;
+    }
+
+    nav img {
+      height: 32px;
+      margin-right: 10px;
+    }
+
+    nav span {
+      font-size: 18px;
+      font-weight: bold;
+    }
+
+    .container {
+      flex: 1;
+      max-width: 460px;
+      width: 100%;
+      margin: 40px auto;
+      background: white;
+      padding: 30px;
+      border-radius: 15px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+
+    h2 {
+      text-align: center;
+      color: var(--primary);
+      margin-bottom: 25px;
+    }
+
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+
+    label {
+      font-weight: bold;
+      color: var(--text-dark);
+      margin-bottom: 5px;
+    }
+
+    input[type="text"],
+    input[type="password"],
+    input[type="tel"],
+    input[type="file"] {
+      padding: 10px;
+      border-radius: 6px;
+      border: 1px solid var(--accent);
+      width: 100%;
+    }
+
+    button {
+      padding: 12px;
+      background-color: var(--primary);
+      color: white;
+      border: none;
+      border-radius: 6px;
+      font-weight: bold;
+      cursor: pointer;
+      width: 100%;
+    }
+
+    button:hover {
+      background-color: var(--success);
+    }
+
+    .back-link {
+      display: block;
+      text-align: center;
+      margin-top: 20px;
+      text-decoration: none;
+      font-size: 15px;
+      color: var(--primary);
+      font-weight: bold;
+    }
+
+    .back-link:hover {
+      color: var(--success);
+    }
+
+    footer {
+      background-color: var(--primary);
+      color: white;
+      text-align: center;
+      padding: 12px;
+      font-size: 13px;
+    }
+
+    footer span {
+      font-weight: bold;
+      color: var(--bg);
+    }
+
+    @media (max-width: 480px) {
+      .container {
+        margin: 20px;
+        padding: 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navbar -->
+  <nav>
+    <img src="{{ url_for('static', filename='images/asha_logo.png') }}" alt="Logo">
+    <span>E-ASHA - Admin Panel</span>
+  </nav>
+
+  <!-- Form Container -->
+  <div class="container">
+    <h2>Add New ASHA Worker</h2>
+
+    {% if error %}
+      <p style="color: red; text-align: center; font-weight: bold;">{{ error }}</p>
+    {% endif %}
+
+    <form action="/add_asha" method="POST" enctype="multipart/form-data">
+      <div>
+        <label>Username:</label>
+        <input type="text" name="username" value="{{ username or '' }}" required>
+      </div>
+      <div>
+        <label>Password:</label>
+        <input type="password" name="password" required>
+      </div>
+      <div>
+        <label>Name:</label>
+        <input type="text" name="name" value="{{ name or '' }}" required>
+      </div>
+      <div>
+        <label>Mobile:</label>
+        <input type="tel" name="mobile" pattern="[0-9]{10}" maxlength="10" value="{{ mobile or '' }}" required>
+      </div>
+      <div>
+        <label>Location:</label>
+        <input type="text" name="location" value="{{ location or '' }}" required>
+      </div>
+      <div>
+        <label>Photo:</label>
+        <input type="file" name="photo" accept="image/*">
+      </div>
+      <button type="submit">Add Worker</button>
+    </form>
+
+    <a href="/manage_asha" class="back-link">← Back to Manage ASHA</a>
+  </div>
+
+  <!-- Footer -->
+  <footer>
+    Website developed by <span>Rohit Bavale</span> & <span>Sumeet Mungase</span>
+  </footer>
+
+</body>
+</html>

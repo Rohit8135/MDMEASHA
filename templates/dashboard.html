@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Dashboard - E-ASHA</title>
+  <style>
+    :root {
+      --primary: #2F3C7E;
+      --accent: #A8D0E6;
+      --success: #70C1B3;
+      --bg: #F4F4F8;
+      --text-dark: #ffffff;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html, body {
+      height: 100%;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      background: url("{{ url_for('static', filename='images/bg1.jpg') }}") no-repeat center center fixed;
+      background-size: cover;
+      color: var(--text-dark);
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+
+    .wrapper {
+      flex: 1;
+      background-color: rgba(255, 255, 255, 0.95); /* White overlay */
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Sidebar */
+    .sidebar {
+      position: fixed;
+      top: 0;
+      left: -250px;
+      width: 250px;
+      height: 100%;
+      background-color: #1c0c4b;
+      box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+      padding-top: 60px;
+      transition: 0.3s;
+      z-index: 1000;
+    }
+
+    .sidebar a {
+      display: block;
+      color: var(--text-dark);
+      padding: 14px 20px;
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    .sidebar a:hover {
+      background-color: var(--accent);
+    }
+
+    /* Navbar */
+    nav {
+      background-color: var(--primary);
+      padding: 15px 30px;
+      color: white;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: relative;
+    }
+
+    .hamburger {
+      font-size: 24px;
+      color: white;
+      cursor: pointer;
+      z-index: 1001;
+    }
+
+    .nav-center {
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      align-items: center;
+      color: white;
+      font-weight: bold;
+      font-size: 20px;
+    }
+
+    .nav-center img {
+      height: 40px;
+      margin-right: 10px;
+    }
+
+    .nav-right a {
+      color: white;
+      margin-left: 25px;
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    .nav-right a:hover {
+      color: var(--success);
+    }
+
+    /* Content */
+    .container {
+      flex: 1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 40px 20px;
+    }
+
+    .card {
+      background-color: white;
+      padding: 35px;
+      border-radius: 12px;
+      box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+      max-width: 450px;
+      width: 100%;
+      text-align: center;
+    }
+
+    h1 {
+      color: var(--primary);
+      margin-bottom: 25px;
+    }
+
+    label {
+      font-weight: bold;
+      color: var(--primary);
+      display: block;
+      margin-bottom: 8px;
+    }
+
+    input[type="date"] {
+      padding: 10px;
+      font-size: 16px;
+      border: 1px solid var(--accent);
+      border-radius: 6px;
+      width: 100%;
+      margin-bottom: 15px;
+    }
+
+    button {
+      background-color: var(--primary);
+      color: white;
+      border: none;
+      padding: 12px 25px;
+      font-size: 16px;
+      font-weight: bold;
+      border-radius: 6px;
+      cursor: pointer;
+      width: 100%;
+    }
+
+    button:hover {
+      background-color: var(--success);
+    }
+
+    .result {
+      margin-top: 25px;
+      font-size: 24px;
+      font-weight: bold;
+      color: var(--primary);
+    }
+
+    .back-link {
+      display: inline-block;
+      margin-top: 20px;
+      text-decoration: none;
+      color: var(--primary);
+      font-weight: bold;
+    }
+
+    .back-link:hover {
+      color: var(--success);
+    }
+
+    /* Footer */
+    footer {
+      background-color: var(--primary);
+      color: white;
+      text-align: center;
+      padding: 15px;
+      font-size: 14px;
+      margin-top: auto;
+    }
+
+    footer span {
+      color: var(--bg);
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <div class="wrapper">
+    <!-- Sidebar -->
+    <div id="sidebar" class="sidebar">
+      <a href="/profile">Profile</a>
+      <a href="#">Help</a>
+      <a href="/emergency">Emergency Contact</a>
+      <a href="/logout">Logout</a>
+    </div>
+
+    <!-- Navbar -->
+    <nav>
+      <div class="hamburger" onclick="toggleSidebar()">&#9776;</div>
+      <div class="nav-center">
+        <img src="{{ url_for('static', filename='images/asha_logo.png') }}" alt="Logo">
+        E-ASHA - Health App for ASHA Workers
+      </div>
+      <div class="nav-right">
+        <a href="/page1">Home</a>
+        <a href="/history">Patient History</a>
+        <a href="/dashboard">Dashboard</a>
+      </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container">
+      <div class="card">
+        <h1>Patient Count</h1>
+        <form method="POST">
+          <label for="date">Select Date</label>
+          <input type="date" id="date" name="date" value="{{ selected_date }}" required>
+          <button type="submit">Check</button>
+        </form>
+        <div class="result">
+          👩‍⚕️ {{ total_today }} Patient{{ 's' if total_today != 1 else '' }} on {{ formatted_date }}
+        </div>
+        <a href="/page1" class="back-link">← Back to Home</a>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+      Website developed by <span>Rohit Bavale</span> & <span>Sumeet Mungase</span>
+    </footer>
+  </div>
+
+  <!-- Sidebar Script -->
+  <script>
+    function toggleSidebar() {
+      const sidebar = document.getElementById("sidebar");
+      sidebar.style.left = sidebar.style.left === "0px" ? "-250px" : "0px";
+    }
+
+    document.addEventListener("click", function (event) {
+      const sidebar = document.getElementById("sidebar");
+      if (sidebar.style.left === "0px" && !sidebar.contains(event.target) && !event.target.classList.contains("hamburger")) {
+        sidebar.style.left = "-250px";
+      }
+    });
+  </script>
+  {% extends "base.html" %}
+
+</body>
+</html>

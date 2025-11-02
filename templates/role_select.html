@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=420">
+  <title>Select Role - E-ASHA</title>
+  <style>
+    body {
+      background-color: #F4F4F8;
+      font-family: Arial, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+
+    .container {
+      width: 420px;
+      padding: 30px;
+      background-color: white;
+      box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+      border-radius: 12px;
+      text-align: center;
+    }
+
+    .logo {
+      height: 60px;
+      margin-bottom: 20px;
+    }
+
+    h2 {
+      color: #2F3C7E;
+      margin-bottom: 30px;
+    }
+
+    button {
+      width: 100%;
+      padding: 14px;
+      margin: 12px 0;
+      background-color: #2F3C7E;
+      color: white;
+      font-size: 16px;
+      font-weight: bold;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #70C1B3;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <img src="{{ url_for('static', filename='images/asha_logo.png') }}" alt="Logo" class="logo">
+    <h2>Select Your Role</h2>
+    <form action="/login">
+      <button type="submit"> ASHA Worker</button>
+    </form>
+    <form action="/admin_login">
+      <button type="submit"> Admin</button>
+    </form>
+  </div>
+</body>
+</html>

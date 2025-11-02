@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=420">
+  <title>All Patient Reports - E-ASHA</title>
+  <style>
+    :root {
+      --primary: #2F3C7E;
+      --accent: #A8D0E6;
+      --success: #70C1B3;
+      --bg: #F4F4F8;
+      --text-dark: #333333;
+    }
+
+    html, body {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      background: url("{{ url_for('static', filename='images/bg1.jpg') }}") no-repeat center center fixed;
+      background-size: cover;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+
+    .wrapper {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      background-color: rgba(255, 255, 255, 0.95); /* white overlay */
+    }
+
+    nav {
+      background-color: var(--primary);
+      color: white;
+      padding: 12px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .nav-left {
+      display: flex;
+      align-items: center;
+      font-size: 18px;
+      font-weight: bold;
+    }
+
+    .nav-left img {
+      height: 40px;
+      margin-right: 10px;
+    }
+
+    .nav-right a {
+      color: white;
+      text-decoration: none;
+      font-weight: bold;
+      margin-left: 20px;
+    }
+
+    .nav-right a:hover {
+      color: var(--success);
+    }
+
+    .content {
+      padding: 20px;
+      flex: 1;
+    }
+
+    h2 {
+      text-align: center;
+      color: var(--primary);
+      margin-bottom: 20px;
+    }
+
+    .top-bar {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+
+    .search-bar {
+      display: flex;
+      align-items: center;
+    }
+
+    .search-bar input[type="text"] {
+      padding: 8px 12px;
+      width: 250px;
+      border-radius: 6px 0 0 6px;
+      border: 1px solid #ccc;
+      outline: none;
+    }
+
+    .search-bar button {
+      padding: 8px 12px;
+      background-color: var(--primary);
+      color: white;
+      border: none;
+      border-radius: 0 6px 6px 0;
+      cursor: pointer;
+    }
+
+    .filters {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .filters select,
+    .filters input[type="date"] {
+      padding: 8px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      outline: none;
+    }
+
+    .filters button {
+      padding: 10px 16px;
+      background-color: var(--primary);
+      color: white;
+      border: none;
+      border-radius: 6px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .filters button:hover {
+      background-color: var(--success);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background-color: white;
+    }
+
+    th, td {
+      border: 1px solid #ddd;
+      padding: 10px;
+      text-align: center;
+    }
+
+    th {
+      background-color: var(--primary);
+      color: white;
+    }
+
+    .count-box {
+      text-align: right;
+      margin-top: 10px;
+      font-weight: bold;
+      color: var(--primary);
+    }
+
+    .back-button {
+      text-align: center;
+      margin-top: 50px;
+    }
+
+    .back-button a button {
+      padding: 10px 20px;
+      background-color: var(--primary);
+      color: white;
+      border: none;
+      border-radius: 6px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    footer {
+      background-color: var(--primary);
+      color: white;
+      text-align: center;
+      padding: 15px;
+      font-size: 14px;
+    }
+
+    footer span {
+      color: var(--bg);
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="wrapper">
+
+    <!-- Navbar -->
+    <nav>
+      <div class="nav-left">
+        <img src="{{ url_for('static', filename='images/asha_logo.png') }}" alt="E-ASHA Logo">
+        E-ASHA - Admin Panel
+      </div>
+      <div class="nav-right">
+        <a href="/home_admin">Home</a>
+        <a href="/logout">Logout</a>
+      </div>
+    </nav>
+
+    <!-- Content -->
+    <div class="content">
+      <h2>All Patient Reports</h2>
+
+      <form method="get" action="/allview" class="top-bar">
+        <div class="search-bar">
+          <input type="text" name="query" placeholder="Search by name or mobile" value="{{ query }}">
+          <button title="Search">Search</button>
+        </div>
+
+<div class="filters">
+  <select name="user_id">
+    <option value="">All ASHA IDs</option>
+    {% for u in users %}
+      <option value="{{ u }}" {% if selected_user == u %}selected{% endif %}>{{ u }}</option>
+    {% endfor %}
+  </select>
+
+  <label for="from_date" style="font-weight: bold; color: var(--primary);">From:</label>
+  <input type="date" id="from_date" name="from_date" value="{{ from_date }}">
+
+  <label for="to_date" style="font-weight: bold; color: var(--primary);">To:</label>
+  <input type="date" id="to_date" name="to_date" value="{{ to_date }}">
+  <button type="submit">Apply Filter</button>
+
+  <!-- ✅ Export CSV Button -->
+<a href="/export_reports" style="padding: 9.5px 16px; font-size: 14px; background-color: #2F3C7E; color: white; text-decoration: none; border-radius: 4px;">
+  Export Details
+</a>
+
+</div>
+      </form>
+
+      <table>
+        <tr>
+          <th>ASHA Username</th>
+          <th>Patient Name</th>
+          <th>Age</th>
+          <th>Mobile</th>
+          <th>Disease</th>
+          <th>Medicine</th>
+          <th>Date & Time</th>
+        </tr>
+        {% for report in reports %}
+        <tr>
+          <td>{{ report[0] }}</td>
+          <td>{{ report[1] }}</td>
+          <td>{{ report[2] }}</td>
+          <td>{{ report[3] }}</td>
+          <td>{{ report[4] }}</td>
+          <td>{{ report[5] }}</td>
+          <td>{{ report[6] }}</td>
+        </tr>
+        {% endfor %}
+      </table>
+
+      <p style="text-align: center; font-size: 18px; font-weight: bold; color: #2F3C7E;">
+        Total ASHA Workers: {{ total_asha }}<br>
+        Total Patient Reports: {{ total_reports }}
+      </p>
+
+      <!-- Back Button -->
+      <div class="back-button">
+        <a href="/home_admin">
+          <button>← Back to Home</button>
+        </a>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+      Website developed by <span>Rohit Bavale</span> & <span>Sumeet Mungase</span>
+    </footer>
+
+  </div>
+
+</body>
+</html>

@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Disease Frequency Chart - E-ASHA</title>
+  <meta name="viewport" content="width=420">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    :root {
+      --primary: #2F3C7E;
+      --accent: #A8D0E6;
+      --success: #70C1B3;
+      --bg: #F4F4F8;
+    }
+
+    html, body {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      background: url("{{ url_for('static', filename='images/bg1.jpg') }}") no-repeat center center fixed;
+      background-size: cover;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+
+    .wrapper {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      background-color: rgba(255, 255, 255, 0.95); /* white overlay */
+    }
+
+    nav {
+      background-color: var(--primary);
+      color: white;
+      padding: 12px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .nav-left {
+      display: flex;
+      align-items: center;
+      font-weight: bold;
+      font-size: 18px;
+    }
+
+    .nav-left img {
+      height: 40px;
+      margin-right: 10px;
+    }
+
+    .nav-right a {
+      color: white;
+      text-decoration: none;
+      font-weight: bold;
+      margin-left: 20px;
+    }
+
+    .nav-right a:hover {
+      color: var(--success);
+    }
+
+    h2 {
+      text-align: center;
+      color: var(--primary);
+      margin: 20px 0;
+    }
+
+    form {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    select, input[type="date"], button {
+      padding: 8px 12px;
+      margin: 0 10px;
+      border-radius: 6px;
+      border: 1px solid #aaa;
+    }
+
+    canvas {
+      max-width: 800px;
+      margin: auto;
+      display: block;
+      background: #fff;
+      border: 1px solid #ccc;
+      padding: 10px;
+      border-radius: 10px;
+    }
+
+    .back-btn {
+      display: block;
+      width: 200px;
+      margin: 30px auto;
+      text-align: center;
+      padding: 10px 16px;
+      background-color: var(--primary);
+      color: white;
+      font-weight: bold;
+      border-radius: 6px;
+      text-decoration: none;
+    }
+
+    .back-btn:hover {
+      background-color: var(--success);
+    }
+
+    footer {
+      background-color: var(--primary);
+      color: white;
+      text-align: center;
+      padding: 15px;
+      font-size: 14px;
+    }
+
+    footer span {
+      color: var(--bg);
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="wrapper">
+    <!-- Navbar -->
+    <nav>
+      <div class="nav-left">
+        <img src="{{ url_for('static', filename='images/asha_logo.png') }}" alt="E-ASHA Logo">
+        E-ASHA - Admin Panel
+      </div>
+      <div class="nav-right">
+        <!-- Optionally add links here -->
+      </div>
+    </nav>
+
+    <!-- Page Heading -->
+    <h2>Disease Frequency Graph</h2>
+
+    <!-- Filter Form -->
+    <form method="get">
+      <label>User ID:</label>
+      <select name="user_id">
+        <option value="">All</option>
+        {% for u in users %}
+          <option value="{{ u }}" {% if selected_user == u %}selected{% endif %}>{{ u }}</option>
+        {% endfor %}
+      </select>
+
+      <label>Date:</label>
+      <input type="date" name="date" value="{{ selected_date }}">
+
+      <button type="submit" style="background-color: #2F3C7E; color: white; padding: 10px 16px; border: none; border-radius: 6px; font-weight: bold; cursor: pointer;">
+  Apply Filter
+</button>
+
+    </form>
+
+    <!-- Chart -->
+    <canvas id="diseaseChart" width="800" height="400"></canvas>
+
+    <!-- Back Button -->
+    <a href="/home_admin" class="back-btn">← Back to Home</a>
+
+    <!-- Footer -->
+    <footer>
+      Website developed by <span>Rohit Bavale</span> & <span>Sumeet Mungase</span>
+    </footer>
+  </div>
+
+  <!-- Chart Script -->
+  <script>
+    const ctx = document.getElementById('diseaseChart').getContext('2d');
+    const chart = new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels: {{ labels|tojson }},
+        datasets: [{
+          label: 'Number of Patients',
+          data: {{ values|tojson }},
+          backgroundColor: '#2F3C7E'
+        }]
+      },
+      options: {
+        responsive: true,
+        plugins: {
+          legend: { display: false }
+        },
+        scales: {
+          y: {
+            beginAtZero: true,
+            title: {
+              display: true,
+              text: 'Patient Count'
+            }
+          },
+          x: {
+            title: {
+              display: true,
+              text: 'Diseases'
+            }
+          }
+        }
+      }
+    });
+  </script>
+
+</body>
+</html>

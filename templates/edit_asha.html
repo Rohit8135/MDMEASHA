@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Edit ASHA Worker</title>
+  <style>
+    :root {
+      --primary: #2F3C7E;
+      --accent: #A8D0E6;
+      --bg: #F4F4F8;
+      --text-dark: #333;
+      --success: #70C1B3;
+    }
+
+    body {
+      background-color: var(--bg);
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100vh;
+    }
+
+    .container {
+      background: white;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+      max-width: 420px;
+      width: 100%;
+      margin-top: 50px;
+    }
+
+    h2 {
+      text-align: center;
+      color: var(--primary);
+      margin-bottom: 25px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 6px;
+      font-weight: bold;
+      color: var(--primary);
+    }
+
+    input[type="text"],
+    input[type="password"],
+    input[type="file"],
+    input[type="number"] {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 18px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      font-size: 14px;
+    }
+
+    input[type="file"] {
+      background-color: #fff;
+    }
+
+    .btn {
+      width: 100%;
+      background-color: var(--primary);
+      color: white;
+      padding: 12px;
+      font-weight: bold;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 15px;
+      margin-top: 8px;
+    }
+
+    .btn:hover {
+      background-color: #1f2a5c;
+    }
+
+    .back-link {
+      display: inline-block;
+      margin-top: 20px;
+      text-align: center;
+      width: 100%;
+      color: var(--primary);
+      font-weight: bold;
+      text-decoration: none;
+    }
+
+    .back-link:hover {
+      color: var(--success);
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <h2>Edit ASHA Worker</h2>
+    <form method="POST" enctype="multipart/form-data">
+      <label>Username:</label>
+      <input type="text" name="username" value="{{ user.username }}" readonly>
+
+      <label>Password:</label>
+      <input type="password" name="password" value="{{ user.password }}" required>
+
+      <label>Name:</label>
+      <input type="text" name="name" value="{{ user.name }}" required>
+
+      <label>Mobile:</label>
+      <input type="number" name="mobile" value="{{ user.mobile }}" required>
+
+      <label>Location:</label>
+      <input type="text" name="location" value="{{ user.location }}" required>
+
+      <label>Change Photo (optional):</label>
+      <input type="file" name="photo">
+
+      <button type="submit" class="btn">Update Worker</button>
+    </form>
+
+    <a href="{{ url_for('manage_asha') }}" class="back-link">← Back to Manage Workers</a>
+  </div>
+
+</body>
+</html>

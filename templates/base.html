@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}E-ASHA{% endblock %}</title>
+
+    <!-- Main CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+
+    <!-- Chat CSS (optional if separate) -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='chat.css') }}">
+
+    {% block head %}{% endblock %}
+</head>
+<body>
+    <!-- Navbar -->
+    {% block navbar %}{% endblock %}
+
+    <!-- Page Content -->
+    <div class="content">
+        {% block content %}{% endblock %}
+    </div>
+
+    <!-- Chat Widget -->
+    {% include 'chat_widget.html' %}
+
+    <!-- Footer -->
+    {% block footer %}{% endblock %}
+
+    <!-- Main JS -->
+    <script src="{{ url_for('static', filename='main.js') }}"></script>
+
+    <!-- Chat JS -->
+    <script src="{{ url_for('static', filename='chat.js') }}"></script>
+
+    {% block scripts %}{% endblock %}
+</body>
+</html>

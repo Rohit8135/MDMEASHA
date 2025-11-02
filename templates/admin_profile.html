@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Admin Profile - E-ASHA</title>
+  <style>
+    :root {
+      --primary: #2F3C7E;
+      --accent: #A8D0E6;
+      --success: #70C1B3;
+      --bg: #F4F4F8;
+      --text-dark: #333333;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      background: url("{{ url_for('static', filename='images/bg1.jpg') }}") no-repeat center center fixed;
+      background-size: cover;
+    }
+
+    .overlay {
+      background-color: rgba(255, 255, 255, 0.9);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    nav {
+      background-color: var(--primary);
+      color: white;
+      padding: 15px 25px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .nav-center {
+      display: flex;
+      align-items: center;
+      font-weight: bold;
+      font-size: 20px;
+    }
+
+    .nav-center img {
+      height: 40px;
+      margin-right: 10px;
+    }
+
+    .nav-right a {
+      color: white;
+      text-decoration: none;
+      font-weight: bold;
+      margin-left: 20px;
+    }
+
+    .nav-right a:hover {
+      color: var(--success);
+    }
+
+    .profile-container {
+      margin: 50px auto;
+      background: white;
+      padding: 40px;
+      border-radius: 10px;
+      box-shadow: 0 0 12px rgba(0, 0, 0, 0.1);
+      max-width: 500px;
+      width: 100%;
+      text-align: center;
+    }
+
+    .admin-photo {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 3px solid var(--primary);
+      margin-bottom: 20px;
+    }
+
+    h2 {
+      color: var(--primary);
+      margin-bottom: 25px;
+    }
+
+    .profile-info p {
+      font-size: 18px;
+      color: var(--text-dark);
+      margin-bottom: 12px;
+    }
+
+    .profile-info span {
+      font-weight: bold;
+      color: var(--primary);
+    }
+
+    .back-button {
+      margin-top: 30px;
+    }
+
+    .back-button a {
+      text-decoration: none;
+      background-color: var(--primary);
+      color: white;
+      padding: 10px 20px;
+      border-radius: 6px;
+      font-weight: bold;
+    }
+
+    .back-button a:hover {
+      background-color: var(--success);
+    }
+
+    footer {
+      margin-top: auto;
+      background-color: var(--primary);
+      color: white;
+      text-align: center;
+      padding: 15px;
+      font-size: 14px;
+    }
+
+    footer span {
+      color: var(--bg);
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <div class="overlay">
+    <!-- Navbar -->
+    <nav>
+      <div class="nav-center">
+        <img src="{{ url_for('static', filename='images/asha_logo.png') }}" alt="Logo">
+        E-ASHA - Admin Profile
+      </div>
+      <div class="nav-right">
+        <a href="/home_admin">Home</a>
+        <a href="/logout">Logout</a>
+      </div>
+    </nav>
+
+    <!-- Profile Box -->
+
+    
+    <div class="profile-container">
+    
+      <h2>Admin Details</h2>
+      <img src="{{ url_for('static', filename='admin_photos/' + photo) }}"
+     alt="Admin Photo"
+     class="admin-photo"
+     onerror="this.src='{{ url_for('static', filename='images/default_user.png') }}';">
+
+
+      <div class="profile-info">
+        <p><span>ID:</span> {{ admin_id }}</p>
+        <p><span>Name:</span> {{ name }}</p>
+        <p><span>Mobile:</span> {{ mobile }}</p>
+        <p><span>Location:</span> {{ location }}</p>
+      </div>
+
+      <div class="back-button">
+        <a href="/home_admin">← Back to Home</a>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+      Website developed by <span>Rohit Bavale</span> & <span>Sumeet Mungase</span>
+    </footer>
+  </div>
+</body>
+</html>

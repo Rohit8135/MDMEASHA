@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}E-ASHA{% endblock %}</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='chat.css') }}">
+  <style>
+    :root {
+      --primary: #2F3C7E;
+      --accent: #A8D0E6;
+      --success: #70C1B3;
+      --bg: #F4F4F8;
+      --text: #333;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body {
+      height: 100%;
+      font-family: Arial, sans-serif;
+      background: var(--bg);
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Navbar */
+    .navbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: var(--primary);
+      color: white;
+      padding: 10px 15px;
+      position: relative;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .logo img {
+      height: 28px;
+      width: 28px;
+    }
+
+    .logo .title {
+      font-size: 18px;
+      font-weight: bold;
+    }
+
+    /* Dropdown */
+    .dropdown {
+      position: relative;
+    }
+
+    .dropdown-toggle {
+      background: none;
+      border: none;
+      color: white;
+      font-size: 18px;
+      cursor: pointer;
+    }
+
+    .dropdown-menu {
+      display: none;
+      position: absolute;
+      right: 0;
+      top: 40px;
+      background: white;
+      color: var(--text);
+      border-radius: 6px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+      min-width: 140px;
+      z-index: 1000;
+    }
+
+    .dropdown-menu a {
+      display: block;
+      padding: 10px 15px;
+      text-decoration: none;
+      color: var(--text);
+    }
+
+    .dropdown-menu a:hover {
+      background: var(--accent);
+    }
+
+    /* Sidebar (kept for desktop use if needed) */
+    .sidebar {
+      width: 220px;
+      background: var(--primary);
+      color: white;
+      height: 100vh;
+      position: fixed;
+      top: 0;
+      left: -220px;
+      transition: 0.3s;
+      z-index: 1000;
+      padding-top: 60px;
+    }
+
+    .sidebar.active { left: 0; }
+
+    .sidebar a {
+      display: block;
+      color: white;
+      padding: 12px 20px;
+      text-decoration: none;
+      font-size: 16px;
+    }
+
+    .sidebar a:hover { background: #1f2a59; }
+
+    /* Page content */
+    .content {
+      flex: 1;
+      width: 95%;
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 15px 0;
+    }
+
+    /* Footer */
+    footer {
+      background: var(--primary);
+      color: white;
+      text-align: center;
+      padding: 12px 0;
+      font-size: 14px;
+    }
+
+    /* Chat button */
+    #chat-btn {
+      position: fixed;
+      bottom: 80px;
+      right: 20px;
+      background: var(--primary);
+      color: white;
+      font-size: 22px;
+      border-radius: 50%;
+      padding: 15px;
+      cursor: pointer;
+      box-shadow: 0px 4px 8px rgba(0,0,0,0.2);
+      z-index: 1000;
+    }
+
+    /* Chat popup */
+    #chat-popup {
+      display: none;
+      position: fixed;
+      bottom: 140px;
+      right: 20px;
+      width: 320px;
+      height: 450px;
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+      overflow: hidden;
+      z-index: 1000;
+      flex-direction: column;
+    }
+
+    .chat-header {
+      background: var(--primary);
+      color: white;
+      font-weight: bold;
+      padding: 12px;
+      text-align: center;
+    }
+
+    #chat-box {
+      flex: 1;
+      padding: 10px;
+      overflow-y: auto;
+      background: var(--bg);
+      display: flex;
+      flex-direction: column;
+    }
+
+    .bot-msg, .user-msg {
+      margin: 6px 0;
+      padding: 8px 12px;
+      border-radius: 8px;
+      max-width: 80%;
+      word-wrap: break-word;
+    }
+
+    .bot-msg { background: var(--accent); color: var(--text); align-self: flex-start; }
+    .user-msg { background: var(--success); color: white; align-self: flex-end; margin-left: auto; }
+
+    .chat-input {
+      display: flex;
+      padding: 6px;
+      border-top: 1px solid #ddd;
+    }
+
+    .chat-input input {
+      flex: 1;
+      padding: 8px 12px;
+      border-radius: 20px;
+      border: 1px solid #ccc;
+      outline: none;
+    }
+
+    .chat-input button {
+      margin-left: 8px;
+      padding: 8px 14px;
+      border-radius: 20px;
+      border: none;
+      background: var(--primary);
+      color: white;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .chat-input button:hover { background: #1f2a59; }
+
+    /* Common questions */
+    #common-questions {
+      padding: 10px;
+      border-top: 1px solid #ccc;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 5px;
+    }
+
+    #common-questions .common-q {
+      flex: 1 1 45%;
+      padding: 6px 10px;
+      background: var(--accent);
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 14px;
+    }
+
+    #common-questions .common-q:hover { background: var(--success); color: white; }
+
+    /* Responsive */
+    @media (max-width: 480px) {
+      .logo .title { font-size: 16px; }
+      #chat-popup { width: 220px; height: 350px; }
+    }
+  </style>
+</head>
+<body>
+  <!-- Navbar -->
+  <div class="navbar">
+    <div class="logo">
+      <img src="{{ url_for('static', filename='logo.png') }}" alt="Logo">
+      <span class="title">E-ASHA</span>
+    </div>
+    <div class="dropdown">
+      <button class="dropdown-toggle" onclick="toggleDropdown()">▼</button>
+      <div class="dropdown-menu" id="dropdownMenu">
+        <a href="{{ url_for('home') }}">Home</a>
+        <a href="{{ url_for('history') }}">History</a>
+        <a href="{{ url_for('dashboard') }}">Dashboard</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Sidebar (kept for desktop use) -->
+  <div class="sidebar" id="sidebar">
+    <a href="{{ url_for('profile') }}">Profile</a>
+    <a href="{{ url_for('help') }}">Help</a>
+    <a href="{{ url_for('emergency') }}">Emergency</a>
+    <a href="{{ url_for('logout') }}">Log Out</a>
+  </div>
+
+  <!-- Page content -->
+  <div class="content">
+    {% block content %}{% endblock %}
+  </div>
+
+  <!-- Footer -->
+  <footer>
+    &copy; 2025 E-ASHA
+  </footer>
+
+  <!-- Chat button -->
+  <div id="chat-btn" onclick="toggleChat()">💬</div>
+
+  <!-- Chat popup -->
+  <div id="chat-popup">
+    <div class="chat-header">E-ASHA Assistant</div>
+    <div id="chat-box"><div class="bot-msg">👋 Hello! How can I help you?</div></div>
+    <div id="common-questions">
+      <button class="common-q">Add patient</button>
+      <button class="common-q">Patient history</button>
+      <button class="common-q">Emergency contacts</button>
+      <button class="common-q">Dashboard help</button>
+    </div>
+    <div class="chat-input">
+      <input type="text" id="user-input" placeholder="Type your message..." />
+      <button id="send-btn">Send</button>
+    </div>
+  </div>
+
+  <script>
+    function toggleDropdown() {
+      const menu = document.getElementById("dropdownMenu");
+      menu.style.display = (menu.style.display === "block") ? "none" : "block";
+    }
+    window.onclick = function(event) {
+      if (!event.target.matches('.dropdown-toggle')) {
+        document.querySelectorAll(".dropdown-menu").forEach(menu => {
+          menu.style.display = "none";
+        });
+      }
+    }
+
+    function toggleChat() {
+      const popup = document.getElementById("chat-popup");
+      popup.style.display = (popup.style.display === "flex") ? "none" : "flex";
+    }
+
+    function appendMessage(content, type) {
+      const chatBox = document.getElementById("chat-box");
+      const msgDiv = document.createElement("div");
+      msgDiv.className = type === "user" ? "user-msg" : "bot-msg";
+      msgDiv.innerHTML = content;
+      chatBox.appendChild(msgDiv);
+      chatBox.scrollTop = chatBox.scrollHeight;
+    }
+
+    async function sendMessage() {
+      const input = document.getElementById("user-input");
+      const msg = input.value.trim();
+      if (!msg) return;
+      appendMessage(msg, "user");
+      input.value = "";
+      try {
+        const response = await fetch("/ask", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ message: msg })
+        });
+        const data = await response.json();
+        appendMessage(data.reply, "bot");
+      } catch (err) {
+        appendMessage("⚠️ Server error.", "bot");
+      }
+    }
+
+    document.getElementById("send-btn").addEventListener("click", sendMessage);
+    document.getElementById("user-input").addEventListener("keypress", function(event) {
+      if (event.key === "Enter") {
+        event.preventDefault();
+        sendMessage();
+      }
+    });
+
+    document.querySelectorAll(".common-q").forEach(btn => {
+      btn.addEventListener("click", () => {
+        const input = document.getElementById("user-input");
+        input.value = btn.textContent;
+        sendMessage();
+      });
+    });
+  </script>
+  {% block scripts %}{% endblock %}
+</body>
+</html>

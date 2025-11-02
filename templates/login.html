@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=420"> <!-- Fixed width for all devices -->
+  <title>Login - E-ASHA</title>
+  <style>
+    body {
+      background-color: #F4F4F8;
+      font-family: Arial, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+
+    .container {
+      width: 420px;
+      padding: 30px;
+      background-color: white;
+      box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+      border-radius: 12px;
+      text-align: center;
+    }
+
+    .logo {
+      display: block;
+      margin: 0 auto 20px;
+      height: 60px;
+    }
+
+    h2 {
+      color: #2F3C7E;
+      margin-bottom: 20px;
+    }
+
+    label {
+      display: block;
+      font-weight: bold;
+      color: #2F3C7E;
+      margin-top: 15px;
+      text-align: left;
+    }
+
+    input {
+      width: 100%;
+      padding: 10px;
+      margin-top: 5px;
+      border: 1px solid #A8D0E6;
+      border-radius: 6px;
+      font-size: 14px;
+    }
+
+    button {
+      width: 100%;
+      margin-top: 25px;
+      background-color: #2F3C7E;
+      color: white;
+      padding: 12px;
+      border: none;
+      border-radius: 6px;
+      font-weight: bold;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #70C1B3;
+    }
+
+    .forgot {
+      margin-top: 15px;
+      text-align: right;
+    }
+
+    .forgot a {
+      font-size: 13px;
+      color: #2F3C7E;
+      text-decoration: none;
+    }
+
+    .forgot a:hover {
+      text-decoration: underline;
+    }
+
+    .error {
+      color: red;
+      margin-top: 15px;
+      font-size: 14px;
+    }
+
+    .back-btn {
+      display: inline-block;
+      width: 50%;
+      margin-top: 15px;
+      background-color: #A8D0E6;
+      color: #2F3C7E;
+      padding: 12px;
+      border: none;
+      border-radius: 6px;
+      font-weight: bold;
+      font-size: 16px;
+      text-decoration: none;
+      text-align: center;
+    }
+
+    .back-btn:hover {
+      background-color: #70C1B3;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- Logo -->
+    <img src="{{ url_for('static', filename='images/asha_logo.png') }}" alt="E-ASHA Logo" class="logo">
+
+    <h2>ASHA Worker Login</h2>
+
+    <form method="post">
+      <label for="username">Username</label>
+      <input type="text" name="username" required>
+
+      <label for="password">Password</label>
+      <input type="password" name="password" required>
+
+      <div class="forgot">
+        <a href="#">Forgot Password?</a>
+      </div>
+
+      <button type="submit">Login</button>
+
+      <a href="/role" class="back-btn">← Back to Select Role</a>
+
+      {% if error %}
+        <div class="error">{{ error }}</div>
+      {% endif %}
+    </form>
+  </div>
+</body>
+</html>
