@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for, session, send_file,jsonify
+from flask import Flask, render_template, request, redirect, url_for, session, send_file, jsonify
 from groq import Groq
 import csv
 import datetime
@@ -6,16 +6,35 @@ import os
 import io
 from dotenv import load_dotenv
 
+# ✅ Load environment variables from .env (for local use)
+load_dotenv()
+
+# ✅ Initialize Flask app
 app = Flask(__name__)
 app.secret_key = 'your_secret_key'
 
+# ✅ Configure upload folder
 UPLOAD_FOLDER = 'static/uploads'
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
+# ✅ Define file paths
 REPORT_FILE = 'reports.csv'
 USERS_FILE = 'users.csv'
 ADMIN_FILE = 'admin.csv'
+
+# ✅ Load Groq API key
+groq_key = os.getenv("GROQ_API_KEY")
+
+# ✅ Debug print (visible in Render logs)
+if not groq_key:
+    print("❌ ERROR: GROQ_API_KEY not found in environment variables! Please set it on Render.")
+else:
+    print("✅ GROQ_API_KEY loaded successfully.")
+
+# ✅ Initialize Groq client safely
+client = Groq(api_key=groq_key)
+
 
 # ------------------------- STATIC DISEASE DATA ------------------------- #
 disease_data = {
